@@ -11,7 +11,7 @@ class ProductSerializers(serializers.ModelSerializer):
 class CartSerializers(serializers.ModelSerializer):
     class Meta:
         model = Cart
-        fields = ["id", "amount", "product"]
+        fields = ["id", "product", "qty", "total_price"]
 
 
 class CategorySerializers(serializers.ModelSerializer):
@@ -23,10 +23,10 @@ class CategorySerializers(serializers.ModelSerializer):
 class TransactionSerializers(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ["id", "date", "amount"]
+        fields = ["id", "date", "cart"]
 
 
 class DetailTransactionSerializers(serializers.ModelSerializer):
     class Meta:
         model = DetailTransaction
-        fields = ["id", "transaction", "product", "amount"]
+        fields = ["id", "transaction", "product"]
