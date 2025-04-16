@@ -38,5 +38,5 @@ Untuk backend project ini menggunakan Python, pastikan versi
 - Buat superuser jika diperlukan  
 `> python manage.py createsuperuser`
 - Jalankan server  
-`> python3 manage.py runserver`
+`> python manage.py runserver`
 
