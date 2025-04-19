@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { getCategory } from '../api/categoryAPI';
+import { getProducts } from '../api/productAPI';
 
 const ProductPage = () => {
     const [kategoriAktif, setKategoriAktif] = useState(null);
@@ -7,9 +9,12 @@ const ProductPage = () => {
     const [products, setProducts] = useState([])
 
     useEffect(() => {
+        getCategory().then(data => setCategory(data));
+        getProducts().then(data => setProducts(data));
         //Data dari API Asik
     }, []);
 
+    console.log(getProducts)
     useEffect(() => {
         if (kategoriAktif !== null) {
             const filtered = products.filter(product => product.id_category === kategoriAktif);
