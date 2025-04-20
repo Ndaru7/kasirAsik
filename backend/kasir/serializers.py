@@ -21,13 +21,15 @@ class CartSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ["id", "product", "qty", "total_price"]
+        fields = ("id", "product", "qty", "total_price")
 
 
 class TransactionSerializers(serializers.ModelSerializer):
+    cart = CartSerializers()
+
     class Meta:
         model = Transaction
-        fields = ["id", "date", "cart"]
+        fields = ("id", "date", "cart")
 
 
 class DetailTransactionSerializers(serializers.ModelSerializer):
