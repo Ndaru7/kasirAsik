@@ -11,7 +11,7 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     price = models.PositiveIntegerField()
     stock = models.PositiveIntegerField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="category")
 
     def __str__(self):
         return self.name

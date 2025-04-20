@@ -6,7 +6,7 @@ from .serializers import (CartSerializers, ProductSerializers,
                           DetailTransactionSerializers)
 
 
-# ==== Product views ==== #
+# Product views
 class ProductListView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
@@ -18,7 +18,6 @@ class ProductRetrieveView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializers
     lookup_url_kwarg = "product_id"
     permission_classes = [AllowAny]
-# ======================= #
 
 
 # ==== Category views ==== #
