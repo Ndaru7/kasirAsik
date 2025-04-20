@@ -33,8 +33,7 @@ class Transaction(models.Model):
     
 
 class DetailTransaction(models.Model):
-    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, related_name="transaction")
 
     def __str__(self):
-        return f"Transaction at {self.transaction.date}: {self.product.name}"
+        return f"Transaction at {self.transaction.date}"
