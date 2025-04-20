@@ -17,7 +17,7 @@ class Product(models.Model):
         return self.name
     
 class Cart(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product")
     qty = models.PositiveIntegerField(default=0)
     total_price = models.PositiveIntegerField(default=0)
 
