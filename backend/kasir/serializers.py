@@ -16,7 +16,7 @@ class ProductSerializers(serializers.ModelSerializer):
 
 
 class CartSerializers(serializers.ModelSerializer):
-    product = ProductSerializers(read_only=True)
+    # product = ProductSerializers(read_only=True)
 
     class Meta:
         model = Cart
