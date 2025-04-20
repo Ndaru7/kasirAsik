@@ -9,7 +9,7 @@ class CategorySerializers(serializers.ModelSerializer):
 
 
 class ProductSerializers(serializers.ModelSerializer):
-    category = CategorySerializers()
+    category = CategorySerializers(read_only=True)
 
     class Meta:
         model = Product
@@ -17,7 +17,7 @@ class ProductSerializers(serializers.ModelSerializer):
 
 
 class CartSerializers(serializers.ModelSerializer):
-    product = ProductSerializers()
+    product = ProductSerializers(read_only=True)
 
     class Meta:
         model = Cart
@@ -25,7 +25,7 @@ class CartSerializers(serializers.ModelSerializer):
 
 
 class TransactionSerializers(serializers.ModelSerializer):
-    cart = CartSerializers()
+    cart = CartSerializers(read_only=True)
 
     class Meta:
         model = Transaction
@@ -33,7 +33,7 @@ class TransactionSerializers(serializers.ModelSerializer):
 
 
 class DetailTransactionSerializers(serializers.ModelSerializer):
-    transaction = TransactionSerializers()
+    transaction = TransactionSerializers(read_only=True)
 
     class Meta:
         model = DetailTransaction
