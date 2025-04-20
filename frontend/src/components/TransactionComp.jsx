@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { getProducts } from '../api/productAPI';
 
 
 const dummyProducts = [
@@ -58,8 +59,15 @@ const dummyProducts = [
 function TransactionComp({ isOpen, onClose }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [cart, setCart] = useState([]);
+    const [productReady, setProductReady] = useState([])
 
-    const filteredProducts = dummyProducts
+    useEffect(()=>{
+        getProducts().then(data => setProductReady(data))
+    },[])
+    const dataProduk = productReady;
+    // console.log(dataProduk)
+
+    const filteredProducts = dataProduk
         .filter((product) =>
             product.name.toLowerCase().includes(searchTerm.toLowerCase())
         )
@@ -135,7 +143,7 @@ function TransactionComp({ isOpen, onClose }) {
                                     onClick={() => addToCart(product)}
                                 >
                                     <span>{product.name}</span>
-                                    <span className="text-sm italic text-gray-600">{product.qty}</span>
+                                    <span className="text-sm italic text-gray-600">{product.stock}</span>
                                 </li>
                             ))}
                         </ul>

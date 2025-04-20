@@ -1,11 +1,41 @@
 
 ###
-GET http://localhost:8000/kasir/products/2
+GET http://localhost:8000/kasir/products/
 
 ###
-GET http://127.0.0.1:8000/kasir/category/1
+POST http://localhost:8000/kasir/products/
+Content-Type: application/json
+
+{
+    "name" : "Susu Fisalia",
+    "price" : 9000,
+    "stock" : 30,
+    "category" : {
+        "id" : 2,
+        "name" : "Minuman"
+    }
+}
+
+
+###
+GET http://127.0.0.1:8000/kasir/category/
+
+###
+GET http://127.0.0.1:8000/kasir/cart/
+
+
+###
+POST GET http://127.0.0.1:8000/kasir/cart/
+Content-Type: application/json
+
+{
+    "product" : ""
+}
+
+
 
 
 
 
 ###
+GET http://localhost:8000/kasir/detail_transaction/

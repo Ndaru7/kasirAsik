@@ -13,8 +13,8 @@ const ProductPage = () => {
         getProducts().then(data => setProducts(data));
         //Data dari API Asik
     }, []);
-
-    console.log(getProducts)
+    
+    console.log(products)
     useEffect(() => {
         if (kategoriAktif !== null) {
             const filtered = products.filter(product => product.id_category === kategoriAktif);
