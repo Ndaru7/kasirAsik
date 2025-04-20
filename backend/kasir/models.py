@@ -19,7 +19,6 @@ class Product(models.Model):
 class Cart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product")
     qty = models.PositiveIntegerField(default=0)
-    total_price = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.product.name
@@ -27,6 +26,7 @@ class Cart(models.Model):
 class Transaction(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="cart")
+    total_price = models.PositiveIntegerField()
 
     def __str__(self):
         return f"Transaction at {self.date}"
