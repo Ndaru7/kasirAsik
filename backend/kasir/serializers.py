@@ -46,6 +46,18 @@ class TransactionSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         items_data = validated_data.pop("items")
         total_transaction = 0
+
+        # Validasi ketersediaan stok
+        for item in items_data:
+            product = item["product"]
+            qty = item["qty"]
+
+            if qty > product.stock:
+                raise serializers.ValidationError(
+                    f"Stok '{product.name}' tidak cukup gan. Jumlah produk {product.stock}, diminta {qty}. Ampun dahh"
+                )
+
+        # Setelah stock tersedia lanjutkan transaksi
         transaction = Transaction.objects.create(total=0)
 
         for item in items_data:
