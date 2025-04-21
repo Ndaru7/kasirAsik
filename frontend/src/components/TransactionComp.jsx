@@ -1,65 +1,21 @@
-import React, { useState } from 'react'
-
-
-const dummyProducts = [
-    { id: 1, name: "GG SURYA 12 MRH", price: 26000, qty: 35 },
-    { id: 2, name: "GG SURYA 12 CKLT", price: 26000, qty: 12 },
-    { id: 3, name: "GG SURYA 16 MRH", price: 27000, qty: 88 },
-    { id: 4, name: "GG SURYA 16 CKLT", price: 27000, qty: 41 },
-    { id: 5, name: "Susu Fisallia", price: 4500, qty: 66 },
-    { id: 6, name: "Yakult Montelli", price: 9000, qty: 19 },
-    { id: 7, name: "Gorengan Jinzhou", price: 1500, qty: 91 },
-    { id: 8, name: "Criwis Verina", price: 3000, qty: 47 },
-    { id: 9, name: "Indomie Goreng", price: 3500, qty: 86 },
-    { id: 10, name: "Indomie Rebus Ayam", price: 3500, qty: 3 },
-    { id: 11, name: "Aqua 600ml", price: 4000, qty: 75 },
-    { id: 12, name: "Teh Pucuk 350ml", price: 5000, qty: 60 },
-    { id: 13, name: "Ultrajaya Coklat", price: 6000, qty: 39 },
-    { id: 14, name: "SilverQueen Kecil", price: 10500, qty: 53 },
-    { id: 15, name: "Taro Snack Rumput Laut", price: 7500, qty: 8 },
-    { id: 16, name: "Chitato Sapi Panggang", price: 8500, qty: 22 },
-    { id: 17, name: "Kopi Kapal Api", price: 1500, qty: 1 },
-    { id: 18, name: "Good Day Mocacinno", price: 3000, qty: 96 },
-    { id: 19, name: "Luwak White Koffie", price: 3500, qty: 24 },
-    { id: 20, name: "Roti Sari Roti Coklat", price: 6000, qty: 55 },
-    { id: 21, name: "Roti Tawar Sari Roti", price: 9500, qty: 89 },
-    { id: 22, name: "Sambal ABC Sachet", price: 1000, qty: 5 },
-    { id: 23, name: "Kecap Bango Kecil", price: 6500, qty: 71 },
-    { id: 24, name: "Minyak Goreng 1L", price: 18000, qty: 10 },
-    { id: 25, name: "Beras Ramos 2kg", price: 29000, qty: 17 },
-    { id: 26, name: "Gula Pasir 1kg", price: 14000, qty: 26 },
-    { id: 27, name: "Garam Dapur Refina", price: 3000, qty: 90 },
-    { id: 28, name: "Sabun Lifebuoy Merah", price: 3500, qty: 68 },
-    { id: 29, name: "Shampoo Pantene 70ml", price: 7500, qty: 48 },
-    { id: 30, name: "Pepsodent 75gr", price: 9500, qty: 15 },
-    { id: 31, name: "Rinso Cair 800ml", price: 17000, qty: 76 },
-    { id: 32, name: "Sikat Gigi Formula", price: 6000, qty: 84 },
-    { id: 33, name: "Tissue Paseo 250 Sheet", price: 12000, qty: 92 },
-    { id: 34, name: "Senter Mini LED", price: 15000, qty: 43 },
-    { id: 35, name: "Baterai ABC AA 2pcs", price: 9000, qty: 7 },
-    { id: 36, name: "Lilin Cap Menara", price: 7000, qty: 100 },
-    { id: 37, name: "Obat Nyamuk Bakar", price: 4000, qty: 4 },
-    { id: 38, name: "Baygon Aerosol", price: 25000, qty: 37 },
-    { id: 39, name: "Sapu Lidi", price: 11000, qty: 23 },
-    { id: 40, name: "Pel Lantai SuperMop", price: 32000, qty: 67 },
-    { id: 41, name: "Botol Minum 500ml", price: 8000, qty: 20 },
-    { id: 42, name: "Gunting Kecil", price: 6000, qty: 79 },
-    { id: 43, name: "Pensil 2B", price: 1500, qty: 99 },
-    { id: 44, name: "Pulpen Standard", price: 2000, qty: 58 },
-    { id: 45, name: "Buku Tulis 38 Lbr", price: 4000, qty: 18 },
-    { id: 46, name: "Lakban Coklat Besar", price: 8500, qty: 13 },
-    { id: 47, name: "Masker Medis 3 Ply", price: 2500, qty: 80 },
-    { id: 48, name: "Hand Sanitizer 100ml", price: 12000, qty: 9 },
-    { id: 49, name: "Korek Gas Tokai", price: 3000, qty: 62 },
-    { id: 50, name: "Sabun Cuci Piring Sunlight", price: 7000, qty: 42 },
-];
+import React, { useEffect, useState } from 'react'
+import { getProducts } from '../api/productAPI';
+import PaymentComp from './PaymentComp';
 
 
 function TransactionComp({ isOpen, onClose }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [cart, setCart] = useState([]);
+    const [productReady, setProductReady] = useState([]);
+    const [showPayment, setShowPayment] = useState(false);
 
-    const filteredProducts = dummyProducts
+    useEffect(() => {
+        getProducts().then(data => setProductReady(data))
+    }, [])
+    const dataProduk = productReady;
+    // console.log(dataProduk)
+
+    const filteredProducts = dataProduk
         .filter((product) =>
             product.name.toLowerCase().includes(searchTerm.toLowerCase())
         )
@@ -135,7 +91,7 @@ function TransactionComp({ isOpen, onClose }) {
                                     onClick={() => addToCart(product)}
                                 >
                                     <span>{product.name}</span>
-                                    <span className="text-sm italic text-gray-600">{product.qty}</span>
+                                    <span className="text-sm italic text-gray-600">{product.stock}</span>
                                 </li>
                             ))}
                         </ul>
@@ -155,7 +111,7 @@ function TransactionComp({ isOpen, onClose }) {
                             <span className="text-center">Aksi</span>
                         </div>
 
-                        <div className="space-y-2 max-h-64 overflow-y-auto">
+                        <ul className="space-y-2 font-semibold max-h-64 overflow-y-auto">
                             {cart.map((item) => (
                                 <div
                                     key={item.id}
@@ -190,7 +146,7 @@ function TransactionComp({ isOpen, onClose }) {
                                     </div>
                                 </div>
                             ))}
-                        </div>
+                        </ul>
 
                         <div className="flex justify-between items-center mt-6 font-bold">
                             <span>TOTAL</span>
@@ -202,9 +158,18 @@ function TransactionComp({ isOpen, onClose }) {
                         </div>
 
                         <div className="flex justify-end mt-4">
-                            <button className="bg-black text-white px-6 py-2 rounded-full font-semibold">
+                            <button
+                                className="bg-black text-white px-6 py-2 rounded-full font-semibold"
+                                onClick={() => setShowPayment(true)}
+                            >
                                 BAYAR
                             </button>
+
+                            <PaymentComp
+                                isOpen={showPayment}
+                                onClose={() => setShowPayment(false)}
+                                totalAmount={total}
+                            />
                         </div>
                     </div>
                 </div>

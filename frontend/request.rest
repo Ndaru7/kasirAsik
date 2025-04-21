@@ -1,11 +1,87 @@
 
 ###
-GET http://localhost:8000/kasir/products/2
+GET http://localhost:8000/kasir/products/
 
 ###
-GET http://127.0.0.1:8000/kasir/category/1
+POST http://localhost:8000/kasir/products/
+Content-Type: application/json
+
+
+{
+    "name": "RedBull PDIP",
+    "price": 6000,
+    "stock": 25,
+    "id_category": 2
+}
+
+
+###
+DELETE  http://localhost:8000/kasir/products/3
+Content-Type: application/json
+
+{
+    "name": "Nasi Goreng Spesial",
+    "price": 18000,
+    "stock": 25,
+    "id_category": 2
+}
+
+
+//CATEGORY
+###
+GET http://127.0.0.1:8000/kasir/category/
+
+###
+POST http://localhost:8000/kasir/category/
+Content-Type: application/json
+
+{
+    "name" : "Minumam"
+}
+
+//ADD TO CART
+###
+GET http://127.0.0.1:8000/kasir/cart/
+
+###
+POST http://127.0.0.1:8000/kasir/cart/
+Content-Type: application/json
+
+{
+    "product" : 1,
+    "qty" : 10,
+    "total_price" : 50000
+}
+
+//TRANSACTION
+###
+GET http://127.0.0.1:8000/kasir/transaction/
+
+###
+POST http://127.0.0.1:8000/kasir/transaction/
+Content-Type: application/json
+
+{
+    "id_cart" : 1,
+    "date" : "2025-04-21"
+}
+
 
 
 
 
 ###
+POST GET http://127.0.0.1:8000/kasir/cart/
+Content-Type: application/json
+
+{
+    "product" : ""
+}
+
+
+
+
+
+
+###
+GET http://localhost:8000/kasir/detail_transaction/

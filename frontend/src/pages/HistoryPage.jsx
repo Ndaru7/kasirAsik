@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { getDetailTransaction } from '../api/detailTransaction';
 
 const HistoryPage = () => {
 
     const [history, setHistory] = useState([]);
     useEffect(() => {
-        //data API ular
+        getDetailTransaction().then(data => setHistory(data));
     }, [])
 
     return (
@@ -24,10 +25,10 @@ const HistoryPage = () => {
                         {history.map((item, index) => (
                             <tr key={item.id} className="text-black font-semibold">
                                 <td className="px-6 py-2">{index + 1}</td>
-                                <td className="px-6 py-2">{item.createdAt}</td>
-                                <td className="px-6 py-2">{item.id_transaction}</td>
-                                <td className="px-6 py-2">{item.id_product}</td>
-                                <td className="px-6 py-2">{item.amount}</td>
+                                <td className="px-6 py-2">{item.transaction.date}</td>
+                                <td className="px-6 py-2">{item.id}</td>
+                                <td className="px-6 py-2">{item.transaction.cart.product.name}</td>
+                                <td className="px-6 py-2">{item.transaction.cart.qty}</td>
                             </tr>
                         ))}
                     </tbody>
