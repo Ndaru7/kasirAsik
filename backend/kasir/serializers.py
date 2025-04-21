@@ -28,6 +28,7 @@ class CartSerializer(serializers.ModelSerializer):
         source="product",
         write_only=True
     )
+    total_price = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Cart
@@ -36,6 +37,7 @@ class CartSerializer(serializers.ModelSerializer):
 
 class TransactionSerializer(serializers.ModelSerializer):
     items = CartSerializer(many=True)
+    total = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Transaction
@@ -43,10 +45,27 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         items_data = validated_data.pop("items")
-        transaction = Transaction.objects.create(**validated_data)
+        total_transaction = 0
+        transaction = Transaction.objects.create(total=0)
 
         for item in items_data:
-            Cart.objects.create(transaction=transaction, **item)
+            product = item["product"]
+            qty = item["qty"]
+            total_price = product.price * qty
+            total_transaction += total_price
+
+            product.stock -= qty
+            product.save()
+
+            Cart.objects.create(
+                transaction=transaction,
+                product=product,
+                qty=qty,
+                total_price=total_price
+            )
+        
+        transaction.total = total_transaction
+        transaction.save()
 
         return transaction
 
