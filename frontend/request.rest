@@ -52,8 +52,16 @@ Content-Type: application/json
 {
     "items": [
         {
-            "id_product" : 3,
+            "id_product" : 5,
             "qty" : 15
+        },
+        {
+            "id_product" : 1,
+            "qty" : 1
+        },
+        {
+            "id_product" : 4,
+            "qty" : 3
         }
     ]
 }

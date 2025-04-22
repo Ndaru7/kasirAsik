@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import qris from "./assets/qris.png"
+import { addTransaction } from '../api/transactionAPI';
 
 
-function PaymentComp({ isOpen, onClose, totalAmount }) {
+function PaymentComp({ isOpen, onClose, totalAmount,items }) {
   const [uangMasuk, setUangMasuk] = useState('');
   const [uangKembalian, setUangKembalian] = useState(0);
   const [pesan, setPesan] = useState('');
+  const [bayar, setBayar] = useState([]);
 
   useEffect(() => {
     if (uangMasuk === '') {
@@ -38,15 +40,25 @@ function PaymentComp({ isOpen, onClose, totalAmount }) {
     onClose(); // kembali ke modal cart
   };
 
-  const handleBayar = () => {
+  const handleBayar = async () => {
     if (uangMasuk === '' || parseInt(uangMasuk) < totalAmount) {
       setPesan('Uang kurang.');
       return;
     }
+    const payload = {
+      items: items.map((item) => ({
+        id_product : item.id,
+        qty : item.qty
+      }))
+    };
+    try {
+      const response = await addTransaction(payload);
+      alert("Pembayaran berhasill")
+    } catch (error) {
+      console.log("Pembayaran Gagal !!", error)
+      setPesan("Terjadi Kesalahan saat menyimpan transaksi");
+    }
 
-    // Logika simpan transaksi bisa ditambahkan di sini
-    alert("Pembayaran berhasil!");
-    handleBatal(); // reset & kembali
   };
 
   if (!isOpen) return null;

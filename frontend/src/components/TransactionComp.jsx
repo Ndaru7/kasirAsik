@@ -169,6 +169,7 @@ function TransactionComp({ isOpen, onClose }) {
                                 isOpen={showPayment}
                                 onClose={() => setShowPayment(false)}
                                 totalAmount={total}
+                                items = {cart}
                             />
                         </div>
                     </div>
