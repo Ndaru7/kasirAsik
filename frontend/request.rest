@@ -1,17 +1,19 @@
 
 ###
+GET http://localhost:8000/kasir/
+
+###
 GET http://localhost:8000/kasir/products/
 
 ###
 POST http://localhost:8000/kasir/products/
 Content-Type: application/json
 
-
 {
-    "name": "RedBull PDIP",
-    "price": 6000,
+    "name": "Kembang Verina",
+    "price": 8500,
     "stock": 25,
-    "id_category": 2
+    "id_category": 1
 }
 
 
@@ -41,16 +43,27 @@ Content-Type: application/json
 
 //ADD TO CART
 ###
-GET http://127.0.0.1:8000/kasir/cart/
+GET http://127.0.0.1:8000/kasir/transaction/
 
 ###
-POST http://127.0.0.1:8000/kasir/cart/
+POST http://127.0.0.1:8000/kasir/transaction/
 Content-Type: application/json
 
 {
-    "product" : 1,
-    "qty" : 10,
-    "total_price" : 50000
+    "items": [
+        {
+            "id_product" : 5,
+            "qty" : 15
+        },
+        {
+            "id_product" : 1,
+            "qty" : 1
+        },
+        {
+            "id_product" : 4,
+            "qty" : 3
+        }
+    ]
 }
 
 //TRANSACTION

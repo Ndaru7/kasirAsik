@@ -4,6 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import Product, Category, Transaction, DetailTransaction
 from .serializers import (ProductSerializer,CategorySerializer,
                           TransactionSerializer, DetailTransactionSerializer)
+from .filters import TransactionFilter
 
 
 # Product views
@@ -28,7 +29,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend]
-    # filterset_class = 
+    filterset_class = TransactionFilter
 
 
 # Detail Transaction views
