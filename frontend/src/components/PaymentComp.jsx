@@ -61,6 +61,8 @@ function PaymentComp({ isOpen, onClose, totalAmount,items }) {
 
   };
 
+  //Pembayaran masih belum berfungsi, bagian handleBayar
+
   if (!isOpen) return null;
 
   return (
