@@ -14,6 +14,6 @@ class TransactionFilter(filters.FilterSet):
 class ProductFilter(filters.FilterSet):
     category = filters.CharFilter(field_name="category", lookup_expr="icontains")
 
-     class Meta:
-     model = Product
-     fields = ("category")
+    class Meta:
+        model = Product
+        fields = ("category")
