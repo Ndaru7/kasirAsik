@@ -12,8 +12,8 @@ class TransactionFilter(filters.FilterSet):
         fields = ("date", "start", "end", "product_name")
 
 class ProductFilter(filters.FilterSet):
-    category = filters.CharFilter(field_name="category", lookup_expr="icontains")
+    category = filters.CharFilter(field_name="category__name", lookup_expr="icontains")
 
     class Meta:
         model = Product
-        fields = ("category")
+        fields = ("category",)
