@@ -34,14 +34,21 @@ class Cart(models.Model):
     def __str__(self):
         return f"{self.product.name} x {self.qty}"
     
-    
+
 class Payment(models.Model):
-    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
+    transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE, related_name="payment")
     amount = models.PositiveIntegerField()
+    total = models.PositiveIntegerField()
     change = models.PositiveIntegerField()
 
+    def save(self, *args, **kwargs):
+        if not self.total:
+            self.total = self.transaction.total
+        self.change = self.amount - self.total
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"Payment #{self.id} - amount: {self.amount} - total: {self.transaction.total}"
+        return f"Payment for transaction {self.transaction.id}"
     
 
 class DetailTransaction(models.Model):
