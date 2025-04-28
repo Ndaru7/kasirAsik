@@ -1,7 +1,7 @@
 .drf-env/
 core/__pycache__/
-db.sqlite3
+*.sqlite3
 kasir/__pycache__/
-kasir/migrations/*.pyc
+kasir/migrations/*.py
 kasir/migrations/__pycache__
 request.http
