@@ -2,5 +2,6 @@
 core/__pycache__/
 db.sqlite3
 kasir/__pycache__/
-kasir/migrations/__pycache__/
+kasir/migrations/*.pyc
+kasir/migrations/__pycache__
 request.http
