@@ -54,6 +54,7 @@ function PaymentComp({ isOpen, onClose, totalAmount,items }) {
     try {
       const response = await addTransaction(payload);
       alert("Pembayaran berhasill")
+      return response.json();
     } catch (error) {
       console.log("Pembayaran Gagal !!", error)
       setPesan("Terjadi Kesalahan saat menyimpan transaksi");
