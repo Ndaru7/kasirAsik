@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Cart, Product, Category, Transaction, DetailTransaction
+from .models import Cart, Product, Category, Transaction, Payment, DetailTransaction
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -80,6 +80,29 @@ class TransactionSerializer(serializers.ModelSerializer):
         transaction.save()
 
         return transaction
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    id_transaction = serializers.PrimaryKeyRelatedField(
+        queryset = Transaction.objects.all(),
+        source = "transaction"
+    )
+
+    class Meta:
+        model = Payment
+        fields = ("id", "id_transaction", "amount", "total", "change")
+        read_only_fields = ("total", "change")
+    
+    def create(self, validated_data):
+        transaction = validated_data["transaction"]
+
+        if validated_data["amount"] < transaction.total:
+            raise serializers.ValidationError("Uang bayar kurang dari total")
+
+        if hasattr(transaction, "payment"):
+            raise serializers.ValidationError("Transaksi sudah pernah dilakukan.")
+
+        return super().create(validated_data)
 
 
 class DetailTransactionSerializer(serializers.ModelSerializer):

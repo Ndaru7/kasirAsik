@@ -1,10 +1,11 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Product, Category, Transaction, DetailTransaction
+from .models import Product, Category, Transaction, Payment, DetailTransaction
 from .serializers import (ProductSerializer,CategorySerializer,
-                          TransactionSerializer, DetailTransactionSerializer)
-from .filters import TransactionFilter
+                          TransactionSerializer, PaymentSerializer,
+                          DetailTransactionSerializer)
+from .filters import TransactionFilter, ProductFilter
 
 
 # Product views
@@ -13,7 +14,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend]
-    # filterset_class = 
+    filterset_class = ProductFilter
 
 
 # Category views
@@ -30,6 +31,12 @@ class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend]
     filterset_class = TransactionFilter
+
+
+# Payment Views
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
 
 
 # Detail Transaction views
