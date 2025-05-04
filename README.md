@@ -1,10 +1,24 @@
 
 # WELCOME TO KASIR ASIK
 
+## Frontend Setup
+
+Untuk frontend project ini menggunakan react, pastikan node.js terinstall dan npm
+otomatis akan terinstall. Install node.js [disini](https://nodejs.org/en/download)
+dan lakukan setup seperti berikut:
+
+- Masuk ke folder frontend  
+``$ cd frontend``
+- Install Semua dependencies dengan cara dibawah dependencies akan terinstall otomatis sesuai dengan package.json  
+``$ npm i``
+- Running React  
+``$ npm run dev``
+
 ## Backend Setup
 
-Untuk backend project ini menggunakan Python, pastikan versi
-**Python >= 3.9**. Pertama, lakukan clone pada repository `git clone https://github.com/Ndaru7/kasirAsik.git` dan lakukan setup sesuai dengan device masing - masing.
+Untuk backend project ini menggunakan Python, pastikan versi **Python >= 3.9**.
+Install python [disini](https://www.python.org/downloads/) dan lakukan setup
+sesuai dengan device masing - masing.
 
 ### Setup untuk Linux
 
