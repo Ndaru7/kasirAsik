@@ -1,6 +1,14 @@
 
 # WELCOME TO KASIR ASIK
 
+Project ini terdiri dari 6 anggota, yaitu:
+- **Salman Afif Awaludin** sebagai project leader dan membuat SRS
+- **Zulfan Ariq Asidqi** sebagai Frontend
+- **M. Indra Ardhana** sebagai UI/UX
+- **Daru Prasetiyo** sebagai Backend
+- **Faza Aditya Pratama** sebagai Backend
+- **Dhika Chairul Bakti** sebagai dokumentasi dan membatu membuat SRS
+
 ## Frontend Setup
 
 Untuk frontend project ini menggunakan react, pastikan node.js terinstall dan npm
