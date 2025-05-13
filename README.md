@@ -1,13 +1,13 @@
 
-# WELCOME TO KASIR ASIK
+# WELCOME TO KASIR KITA
 
 Project ini terdiri dari 6 anggota, yaitu:
-- **Salman Afif Awaludin** sebagai project leader dan membuat SRS
-- **Zulfan Ariq Asidqi** sebagai Frontend
+- **Salman Afif Awaludin** sebagai project leader dan Tester
+- **Zulfan Ariq Asidqi** sebagai Frontend Developer
 - **M. Indra Ardhana** sebagai UI/UX
-- **Daru Prasetiyo** sebagai Backend
-- **Faza Aditya Pratama** sebagai Backend
-- **Dhika Chairul Bakti** sebagai dokumentasi dan membatu membuat SRS
+- **Daru Prasetiyo** sebagai Backend Developer
+- **Faza Aditya Pratama** sebagai Database Specialist
+- **Dhika Chairul Bakti** sebagai dokumentasi SRS
 
 ## Frontend Setup
 
