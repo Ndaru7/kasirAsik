@@ -5,3 +5,4 @@ kasir/__pycache__/
 kasir/migrations/*.py
 kasir/migrations/__pycache__
 request.http
+media/*
