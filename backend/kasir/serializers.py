@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Cart, Product, Category, Transaction, Payment, DetailTransaction
+from .models import Cart, Product, Category, Transaction, Payment, DetailTransaction, Profile
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -111,3 +111,9 @@ class DetailTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DetailTransaction
         fields = ("id", "transaction")
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ("id", "name", "nim", "role", "foto")
