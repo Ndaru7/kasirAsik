@@ -56,3 +56,13 @@ class DetailTransaction(models.Model):
 
     def __str__(self):
         return f"Transaction at {self.transaction.date}"
+    
+
+class Profile(models.Model):
+    name = models.CharField(max_length=200)
+    nim = models.PositiveIntegerField()
+    role = models.CharField(max_length=200)
+    foto = models.ImageField(upload_to="images")
+
+    def __str__(self):
+        return f"{self.name}({self.nim})"
