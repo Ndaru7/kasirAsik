@@ -88,7 +88,7 @@ POST GET http://127.0.0.1:8000/kasir/cart/
 Content-Type: application/json
 
 {
-    "product" : ""
+    "product" : "Susu Satpam BCA"
 }
 
 

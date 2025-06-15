@@ -4,13 +4,15 @@ import HomePage from "./pages/HomePage"
 import ProductPage from "./pages/ProductPage"
 import HistoryPage from "./pages/HistoryPage"
 import AboutPage from "./pages/AboutPage"
+import Dashboard from "./pages/admin/Dashboard";
+import ProductList from "./pages/admin/ProductList";
 
 
 
 
 const router = createBrowserRouter([{
     path: '',
-    element: <NavbarComp/>,
+    element: <Dashboard/>,
     children: [
         {
             path: '/',
@@ -18,7 +20,7 @@ const router = createBrowserRouter([{
         },
         {
             path: '/products',
-            element: <ProductPage/>
+            element: <ProductList/>
         },
         {
             path: '/history',
@@ -28,7 +30,7 @@ const router = createBrowserRouter([{
             path: '/about',
             element: <AboutPage/>
         }
-    ]
+    ],
 }])
 
 
