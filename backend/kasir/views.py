@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import LimitOffsetPagination
 from .models import Product, Category, Transaction, Payment, DetailTransaction, Profile
 from .serializers import (ProductSerializer,CategorySerializer,
                           TransactionSerializer, PaymentSerializer,
@@ -15,6 +16,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend]
     filterset_class = ProductFilter
+    pagination_class = LimitOffsetPagination
 
 
 # Category views
