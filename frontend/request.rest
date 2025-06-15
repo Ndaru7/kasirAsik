@@ -4,14 +4,16 @@ GET http://localhost:8000/kasir/
 
 ###
 GET http://localhost:8000/kasir/products/
+###
+DELETE http://localhost:8000/kasir/products/1
 
 ###
 POST http://localhost:8000/kasir/products/
 Content-Type: application/json
 
 {
-    "name": "Molen BlackShores",
-    "price": 8500,
+    "name": "Sate Septimont",
+    "price": 20000,
     "stock": 25,
     "id_category": 2
 }

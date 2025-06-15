@@ -6,6 +6,7 @@ import HistoryPage from "./pages/HistoryPage"
 import AboutPage from "./pages/AboutPage"
 import Dashboard from "./pages/admin/Dashboard";
 import ProductList from "./pages/admin/ProductList";
+import CategoryList from "./pages/admin/CategoryList";
 
 
 
@@ -23,8 +24,8 @@ const router = createBrowserRouter([{
             element: <ProductList/>
         },
         {
-            path: '/history',
-            element: <HistoryPage/>
+            path: '/category',
+            element: <CategoryList/>
         },
         {
             path: '/about',
