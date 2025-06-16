@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom';
 const ProductList = () => {
     const [products, setProducts] = useState([]);
     const [showModalAdd, setShowModalAdd] = useState(false);
@@ -12,21 +13,25 @@ const ProductList = () => {
     const [count, setCount] = useState();
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    
+
     useEffect(() => {
         getProducts();
         getCategory();
     }, [page])
+    const limit = 20;
+    const offset = (page - 1) * limit
 
     const getProducts = async () => {
-        const response = await axios.get('http://localhost:8000/kasir/products/',{
-            params:{
-                page,
-                limit: 5
+        const response = await axios.get('http://localhost:8000/kasir/products/', {
+            params: {
+                offset,
+                limit
             }
         })
         setProducts(response.data.results)
-        setTotalPages(response.data.totalPages)
+        setTotalPages(Math.ceil(response.data.count / limit));
+        setCount(response.data.count);
+
     }
     const addProduct = async (e) => {
         e.preventDefault();
@@ -55,7 +60,7 @@ const ProductList = () => {
         setSelectedCategory(response.data)
     }
 
-    const deleteProduct = async(id)=>{
+    const deleteProduct = async (id) => {
         e.preventDefault();
         await axios.delete(`http://localhost:8000/kasir/products/${id}`)
         getProducts();
@@ -97,8 +102,9 @@ const ProductList = () => {
                             {products.map((item, idx) => (
                                 <tr key={idx} className="bg-white text-black">
                                     <td className="px-6 py-4">
-                                        {idx + 1}
+                                        {(page - 1) * limit + idx + 1}
                                     </td>
+
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                                         {item.name}
                                     </th>
@@ -112,8 +118,8 @@ const ProductList = () => {
                                         {item.price}
                                     </td>
                                     <td className="px-6 py-4 space-x-5">
-                                        <a className='text-blue-800 cursor-pointer hover:text-blue-400'>Edit</a>
-                                        <a onClick={()=>deleteProduct(item.id)} className='text-red-800 cursor-pointer hover:text-red-300'>Delete</a>
+                                        <Link to={`/product/${item.id}`} className='text-blue-800 cursor-pointer hover:text-blue-400'>Edit</Link>
+                                        <a onClick={() => deleteProduct(item.id)} className='text-red-800 cursor-pointer hover:text-red-300'>Delete</a>
                                     </td>
                                 </tr>
                             ))}
@@ -122,7 +128,7 @@ const ProductList = () => {
                         <tfoot>
                             <tr className="font-semibold text-gray-900 bg-gray-50">
                                 <th scope="row" className="px-6 py-3 text-base">Total</th>
-                                <td className="px-6 py-3"></td>
+                                <td className="px-6 py-3">{count}</td>
                                 <td></td>
                                 <td></td>
                                 <td className="px-6 py-3">21,000</td>
@@ -135,27 +141,27 @@ const ProductList = () => {
                     {/* PAGINATION ASIK*/}
                     <div className='flex justify-center mt-4 space-x-2'>
                         <button
-                            onClick={()=>setPage((prev)=> Math.max(prev-1, 1))}
-                            disabled={page===1}
+                            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                            disabled={page === 1}
                             className='px-4 py-2 bg-gray-200 rounded disabled:opacity-50'
                         >
                             Prev
                         </button>
                         {
-                            [...Array(totalPages)].map((_,i)=>(
+                            [...Array(totalPages)].map((_, i) => (
                                 <button
                                     key={i}
-                                    onClick={()=>setPage(i+1)}
-                                    className={`px-4 py-2 rounded ${page === i+1 ? "bg-blue-500": "bg-gray-100"}`}
+                                    onClick={() => setPage(i + 1)}
+                                    className={`px-4 py-2 rounded ${page === i + 1 ? "bg-blue-500" : "bg-gray-100"}`}
                                 >
-                                    {i+1}
+                                    {i + 1}
                                 </button>
                             ))
                         }
 
                         <button
-                            onClick={()=> setPage((prev)=> Math.min(prev+1, totalPages))}
-                            disabled={page=== totalPages}
+                            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                            disabled={page === totalPages}
                             className='px-4 py-2 bg-gray-200 rounded disabled:opacity-50'
                         >
                             Next

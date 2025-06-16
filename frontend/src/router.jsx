@@ -8,6 +8,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import ProductList from "./pages/admin/ProductList";
 import CategoryList from "./pages/admin/CategoryList";
 import HomeAdmin from "./pages/admin/HomeAdmin";
+import EditProduct from "./pages/admin/product/EditProduct";
 
 
 
@@ -23,6 +24,10 @@ const router = createBrowserRouter([{
         {
             path: '/products',
             element: <ProductList/>
+        },
+        {
+            path: '/product/:id',
+            element: <EditProduct/>
         },
         {
             path: '/category',
