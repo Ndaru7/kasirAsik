@@ -24,6 +24,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [AllowAny]
+    pagination_class = None
 
 
 # Transaction views
@@ -33,6 +34,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend]
     filterset_class = TransactionFilter
+    pagination_class = None
 
 
 # Payment Views
@@ -40,6 +42,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     permission_classes = [AllowAny]
+    pagination_class = None
 
 
 # Detail Transaction views
@@ -47,6 +50,7 @@ class DetailTransactionViewSet(viewsets.ModelViewSet):
     queryset = DetailTransaction.objects.all()
     serializer_class = DetailTransactionSerializer
     permission_classes = [AllowAny]
+    pagination_class = None
 
 
 # Detail Transaction views
@@ -54,3 +58,4 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = [AllowAny]
+    pagination_class = None
