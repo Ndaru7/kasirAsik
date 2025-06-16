@@ -7,6 +7,7 @@ import AboutPage from "./pages/AboutPage"
 import Dashboard from "./pages/admin/Dashboard";
 import ProductList from "./pages/admin/ProductList";
 import CategoryList from "./pages/admin/CategoryList";
+import HomeAdmin from "./pages/admin/HomeAdmin";
 
 
 
@@ -17,7 +18,7 @@ const router = createBrowserRouter([{
     children: [
         {
             path: '/',
-            element: <HomePage/>
+            element: <HomeAdmin/>
         },
         {
             path: '/products',

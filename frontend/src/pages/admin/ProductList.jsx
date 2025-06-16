@@ -8,15 +8,25 @@ const ProductList = () => {
     const [stock, setStock] = useState('')
     const [category, setCategory] = useState([])
     const [selectedCategory, setSelectedCategory] = useState([])
+    // const [result, setResult] = useState()
+    const [count, setCount] = useState();
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     
     useEffect(() => {
         getProducts();
         getCategory();
-    }, [])
+    }, [page])
 
     const getProducts = async () => {
-        const response = await axios.get('http://localhost:8000/kasir/products/')
-        setProducts(response.data)
+        const response = await axios.get('http://localhost:8000/kasir/products/',{
+            params:{
+                page,
+                limit: 5
+            }
+        })
+        setProducts(response.data.results)
+        setTotalPages(response.data.totalPages)
     }
     const addProduct = async (e) => {
         e.preventDefault();
@@ -115,11 +125,43 @@ const ProductList = () => {
                                 <td className="px-6 py-3"></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
                                 <td className="px-6 py-3">21,000</td>
+                                <td></td>
                             </tr>
                         </tfoot>
                     </table>
+                </div>
+                <div>
+                    {/* PAGINATION ASIK*/}
+                    <div className='flex justify-center mt-4 space-x-2'>
+                        <button
+                            onClick={()=>setPage((prev)=> Math.max(prev-1, 1))}
+                            disabled={page===1}
+                            className='px-4 py-2 bg-gray-200 rounded disabled:opacity-50'
+                        >
+                            Prev
+                        </button>
+                        {
+                            [...Array(totalPages)].map((_,i)=>(
+                                <button
+                                    key={i}
+                                    onClick={()=>setPage(i+1)}
+                                    className={`px-4 py-2 rounded ${page === i+1 ? "bg-blue-500": "bg-gray-100"}`}
+                                >
+                                    {i+1}
+                                </button>
+                            ))
+                        }
+
+                        <button
+                            onClick={()=> setPage((prev)=> Math.min(prev+1, totalPages))}
+                            disabled={page=== totalPages}
+                            className='px-4 py-2 bg-gray-200 rounded disabled:opacity-50'
+                        >
+                            Next
+                        </button>
+
+                    </div>
                 </div>
             </div>
             {/* MODAL COMPONENT ADD */}

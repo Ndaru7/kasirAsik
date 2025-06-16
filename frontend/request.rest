@@ -12,7 +12,7 @@ POST http://localhost:8000/kasir/products/
 Content-Type: application/json
 
 {
-    "name": "Sate Septimont",
+    "name": "Pipis Septimont",
     "price": 20000,
     "stock": 25,
     "id_category": 2
