@@ -5,10 +5,10 @@ const NavbarComp = () => {
     const location = useLocation();
 
     const navItems = [
-        { label: "TENTANG", path: "/about" },
-        { label: "RIWAYAT", path: "/history" },
-        { label: "PRODUK", path: "/products" },
-        { label: "HOME", path: "/" },
+        { label: "TENTANG", path: "/kasir/about" },
+        { label: "RIWAYAT", path: "/kasir/history" },
+        { label: "PRODUK", path: "/kasir/products" },
+        { label: "HOME", path: "/kasir/home" },
     ];
 
     return (

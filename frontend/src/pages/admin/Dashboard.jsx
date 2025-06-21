@@ -4,10 +4,10 @@ import { Link, useLocation, Outlet } from 'react-router-dom';
 const DashboardLayout = () => {
   const location = useLocation();
   const sideItems = [
-    { label: 'Dashboard', path: '/' },
-    { label: 'Kategori', path: '/category' },
-    { label: 'Produk', path: '/products' },
-    { label: 'Users', path: '/users' },
+    { label: 'Dashboard', path: '/admin/dashboard' },
+    { label: 'Kategori', path: '/admin/category' },
+    { label: 'Produk', path: '/admin/products' },
+    { label: 'Users', path: '/admin/users' },
   ];
 
   return (
