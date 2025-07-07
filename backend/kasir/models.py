@@ -4,8 +4,8 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     USER_ROLE = (
-        ("Admin", "admin"),
-        ("Kasir", "kasir"),
+        ("admin", "Admin"),
+        ("kasir", "Kasir"),
     )
     role = models.CharField(max_length=20, choices=USER_ROLE)
 
