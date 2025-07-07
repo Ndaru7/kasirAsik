@@ -6,10 +6,9 @@ from rest_framework.pagination import LimitOffsetPagination
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import authenticate, login, logout
-from .models import Product, Category, Transaction, Payment, DetailTransaction, Profile
+from .models import Product, Category, Transaction, Payment
 from .serializers import (ProductSerializer,CategorySerializer,
-                          TransactionSerializer, PaymentSerializer,
-                          DetailTransactionSerializer, ProfileSerializer)
+                          TransactionSerializer, PaymentSerializer)
 from .filters import TransactionFilter, ProductFilter
 
 
@@ -48,21 +47,6 @@ class PaymentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     pagination_class = None
 
-
-# Detail Transaction views
-class DetailTransactionViewSet(viewsets.ModelViewSet):
-    queryset = DetailTransaction.objects.all()
-    serializer_class = DetailTransactionSerializer
-    permission_classes = [IsAuthenticated]
-    pagination_class = None
-
-
-# Detail Transaction views
-class ProfileViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated]
-    pagination_class = None
 
 # Authentication view
 class AuthViewSet(viewsets.ViewSet):
