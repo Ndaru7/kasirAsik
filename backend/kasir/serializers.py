@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Cart, Product, Category, Transaction, Payment, DetailTransaction, Profile
+from .models import Product, Category, Transaction, Payment, Cart
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -28,27 +28,26 @@ class CartSerializer(serializers.ModelSerializer):
         source="product",
         write_only=True
     )
-    total_price = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Cart
-        fields = ("id", "product", "id_product", "qty", "total_price")
+        fields = ("id", "product", "id_product", "qty")
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    items = CartSerializer(many=True)
+    items = CartSerializer(source="cart_items", many=True)
     total = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Transaction
-        fields = ("id", "date", "total", "items")
+        fields = ("id", "date", "items", "total")
 
     def create(self, validated_data):
-        items_data = validated_data.pop("items")
-        total_transaction = 0
+        item_data = validated_data.pop("cart_items", [])
+        transaction = Transaction.objects.create(**validated_data)
 
         # Validasi ketersediaan stok
-        for item in items_data:
+        for item in item_data:
             product = item["product"]
             qty = item["qty"]
 
@@ -58,62 +57,34 @@ class TransactionSerializer(serializers.ModelSerializer):
                 )
 
         # Setelah stock tersedia lanjutkan transaksi
-        transaction = Transaction.objects.create(total=0)
 
-        for item in items_data:
+        for item in item_data:
             product = item["product"]
             qty = item["qty"]
-            total_price = product.price * qty
-            total_transaction += total_price
-
-            product.stock -= qty
-            product.save()
 
             Cart.objects.create(
                 transaction=transaction,
                 product=product,
-                qty=qty,
-                total_price=total_price
+                qty=qty
             )
+
+            product.stock -= qty
+            product.save()
         
-        transaction.total = total_transaction
-        transaction.save()
+        transaction.update_total()
 
         return transaction
 
 
 class PaymentSerializer(serializers.ModelSerializer):
+    transaction = TransactionSerializer(read_only=True)
     id_transaction = serializers.PrimaryKeyRelatedField(
         queryset = Transaction.objects.all(),
-        source = "transaction"
+        source = "transaction",
+        write_only=True,
     )
 
     class Meta:
         model = Payment
-        fields = ("id", "id_transaction", "amount", "total", "change")
-        read_only_fields = ("total", "change")
-    
-    def create(self, validated_data):
-        transaction = validated_data["transaction"]
-
-        if validated_data["amount"] < transaction.total:
-            raise serializers.ValidationError("Uang bayar kurang dari total")
-
-        if hasattr(transaction, "payment"):
-            raise serializers.ValidationError("Transaksi sudah pernah dilakukan.")
-
-        return super().create(validated_data)
-
-
-class DetailTransactionSerializer(serializers.ModelSerializer):
-    transaction = CartSerializer(read_only=True)
-
-    class Meta:
-        model = DetailTransaction
-        fields = ("id", "transaction")
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ("id", "name", "nim", "role", "foto")
+        fields = ("id", "transaction", "id_transaction", "amount", "change")
+        read_only_fields = ("change",)

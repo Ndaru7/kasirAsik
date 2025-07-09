@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
@@ -13,10 +13,10 @@ from .filters import TransactionFilter, ProductFilter
 
 
 # Product views
-class ProductViewSet(LoginRequiredMixin, viewsets.ModelViewSet):
+class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = []
     filter_backends = [DjangoFilterBackend]
     filterset_class = ProductFilter
     pagination_class = LimitOffsetPagination
@@ -26,7 +26,7 @@ class ProductViewSet(LoginRequiredMixin, viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = []
     pagination_class = None
 
 
@@ -34,7 +34,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     filter_backends = [DjangoFilterBackend]
     filterset_class = TransactionFilter
     pagination_class = None
@@ -44,7 +44,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     pagination_class = None
 
 
