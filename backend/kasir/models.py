@@ -9,6 +9,9 @@ class User(AbstractUser):
     )
     role = models.CharField(max_length=20, choices=USER_ROLE)
 
+    def get_role(self):
+        return self.role
+
 class Category(models.Model):
     name = models.CharField(max_length=200)
 
