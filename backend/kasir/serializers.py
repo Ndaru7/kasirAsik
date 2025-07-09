@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Category, Transaction, Payment, Cart
+from kasir.models import Product, Category, Transaction, Payment, Cart
 
 
 class CategorySerializer(serializers.ModelSerializer):

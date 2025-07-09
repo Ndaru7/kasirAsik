@@ -16,7 +16,7 @@ class CustomUser(UserAdmin):
         (None, {
             "fields": ("role",),
         }),
-    ),
+    )
 
 admin.site.register(User, CustomUser)
 admin.site.register(Product)

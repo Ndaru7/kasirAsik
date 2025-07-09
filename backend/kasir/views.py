@@ -8,10 +8,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout as logout_view
-from .models import Product, Category, Transaction, Payment
-from .serializers import (ProductSerializer,CategorySerializer,
+from kasir.models import Product, Category, Transaction, Payment, User
+from kasir.serializers import (ProductSerializer,CategorySerializer,
                           TransactionSerializer, PaymentSerializer)
-from .filters import TransactionFilter, ProductFilter
+from kasir.filters import TransactionFilter, ProductFilter
 
 
 # Product views

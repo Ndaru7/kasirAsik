@@ -1,4 +1,4 @@
-from .models import Product, Transaction
+from kasir.models import Product, Transaction
 from django_filters import rest_framework as filters
 
 class TransactionFilter(filters.FilterSet):
