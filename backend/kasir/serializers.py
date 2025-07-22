@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from kasir.models import Product, Category, Transaction, Payment, Cart
+from kasir.models import Product, Category, Transaction, Payment, Cart, User
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -88,3 +88,11 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = Payment
         fields = ("id", "transaction", "id_transaction", "amount", "change")
         read_only_fields = ("change",)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    role = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "role"]

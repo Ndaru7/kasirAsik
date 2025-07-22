@@ -10,7 +10,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout as logout_view
 from kasir.models import Product, Category, Transaction, Payment, User
 from kasir.serializers import (ProductSerializer,CategorySerializer,
-                          TransactionSerializer, PaymentSerializer)
+                          TransactionSerializer, PaymentSerializer,
+                          UserSerializer)
 from kasir.filters import TransactionFilter, ProductFilter
 
 
@@ -60,8 +61,10 @@ class AuthViewSet(viewsets.ViewSet):
         user = authenticate(username=username, password=password)
         if user:
             token, created = Token.objects.get_or_create(user=user)
+            user_data = UserSerializer(user).data
             return Response({"message": "Login Berhasil",
-                             "token": token.key})
+                             "token": token.key,
+                             "user": user_data})
         
         return Response({"error": "Ada yang salah!"},
                         status=status.HTTP_401_UNAUTHORIZED)
