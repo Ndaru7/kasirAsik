@@ -74,3 +74,10 @@ class AuthViewSet(viewsets.ViewSet):
         request.user.auth_token.delete()
         return Response({"message": "Logout berhasil!"},
                         status=status.HTTP_200_OK)
+
+# User Views
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [DjangoModelPermissions]
+    pagination_class = None
