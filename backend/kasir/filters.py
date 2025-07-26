@@ -13,7 +13,8 @@ class TransactionFilter(filters.FilterSet):
 
 class ProductFilter(filters.FilterSet):
     category = filters.CharFilter(field_name="category__name", lookup_expr="icontains")
+    search = filters.CharFilter(field_name="name", lookup_expr="icontains")
 
     class Meta:
         model = Product
-        fields = ("category",)
+        fields = ("category", "search")
