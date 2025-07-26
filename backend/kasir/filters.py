@@ -3,13 +3,12 @@ from django_filters import rest_framework as filters
 
 class TransactionFilter(filters.FilterSet):
     date = filters.DateFilter(field_name="date", lookup_expr="date")
-    start = filters.DateFilter(field_name="start", lookup_expr="gte")
-    end = filters.DateFilter(field_name="end", lookup_expr="lte")
-    product_name = filters.CharFilter(field_name="items__product__name", lookup_expr="icontains")
+    start = filters.DateFilter(field_name="date", lookup_expr="gte")
+    end = filters.DateFilter(field_name="date", lookup_expr="lte")
 
     class Meta:
         model = Transaction
-        fields = ("date", "start", "end", "product_name")
+        fields = ("date", "start", "end")
 
 class ProductFilter(filters.FilterSet):
     category = filters.CharFilter(field_name="category__name", lookup_expr="icontains")
