@@ -11,84 +11,96 @@ import TopProductsTable from "./components/table/TopProductsTable";
 
 const AdminDashboard = () => {
   const { user } = useAuth();
-  const [data, setData] = useState([]);
-  const [products, setProducts] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
+  const [orderGrowth, setOrderGrowth] = useState(0);
+  const [revenueGrowth, setRevenueGrowth] = useState(0);
   const [monthlyTarget, setMonthlyTarget] = useState(5000000);
   const [monthlyOrdersData, setMonthlyOrdersData] = useState([]);
-
-  // Token User
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   const handleAnimationComplete = () => {
-    console.log("All letters have animated!");
+    console.log("Animated!");
   };
 
   useEffect(() => {
-    getTransaction();
-    getProducts();
-    getSummaryTransaction();
+    fetchData();
   }, []);
 
-  const getTransaction = async () => {
-    const response = await axios.get(myApi + `kasir/transaction/`, {
-      headers: {
-        Authorization: `Token ${token}`
+  const fetchData = async () => {
+    try {
+      const [trxRes, prodRes] = await Promise.all([
+        axios.get(myApi + "kasir/transaction/", {
+          headers: { Authorization: `Token ${token}` },
+        }),
+        axios.get(myApi + "kasir/products/", {
+          headers: { Authorization: `Token ${token}` },
+        }),
+      ]);
+
+      const trxData = trxRes.data;
+      const prodData = prodRes.data;
+
+      setTransactions(
+        trxData.flatMap(trx => trx.items.map(item => ({ ...item, createdAt: trx.date })))
+      );
+      setProducts(prodData);
+
+      const thisMonth = new Date().getMonth();
+      const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
+
+      let currRevenue = 0, lastRevenue = 0;
+      let currOrders = 0, lastOrders = 0;
+
+      const monthMap = {};
+      const now = new Date();
+      for (let i = 11; i >= 0; i--) {
+        const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const label = date.toLocaleString("id-ID", { month: "short", year: "numeric" });
+        monthMap[label] = 0;
       }
-    });
-    setData(response.data.data);
-  };
 
-  const getProducts = async () => {
-    const response = await axios.get(myApi + `kasir/products/`, {
-      headers: {
-        Authorization: `Token ${token}`
-      }
-    });
-    setProducts(response.data);
-  };
+      trxData.forEach(trx => {
+        const trxDate = new Date(trx.date);
+        const month = trxDate.getMonth();
+        const label = trxDate.toLocaleString("id-ID", { month: "short", year: "numeric" });
 
-  const getSummaryTransaction = async () => {
-    const response = await axios.get(myApi + `/transactions-summary`, {
-      headers: {
-        Authorization: `Token ${token}`
-      }
-    });
+        if (monthMap[label] !== undefined) monthMap[label]++;
 
-    setTotalOrders(response.data.totalData);
+        const isThisMonth = month === thisMonth;
+        const isLastMonth = month === lastMonth;
 
-    // Hitung total pendapatan
-    const total = response.data.data.reduce((acc, trx) => acc + trx.total_price, 0);
-    setTotalRevenue(total);
+        if (isThisMonth) {
+          currRevenue += trx.total;
+          currOrders++;
+        } else if (isLastMonth) {
+          lastRevenue += trx.total;
+          lastOrders++;
+        }
+      });
 
-    // Buat 12 bulan terakhir
-    const monthMap = {};
-    const now = new Date();
-    for (let i = 11; i >= 0; i--) {
-      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const label = date.toLocaleString("id-ID", { month: "short", year: "numeric" });
-      monthMap[label] = 0;
+      setTotalOrders(currOrders);
+      setTotalRevenue(currRevenue);
+
+      // Hitung growth
+      const orderGrowthPercent = lastOrders > 0 ? ((currOrders - lastOrders) / lastOrders) * 100 : 100;
+      const revenueGrowthPercent = lastRevenue > 0 ? ((currRevenue - lastRevenue) / lastRevenue) * 100 : 100;
+
+      setOrderGrowth(orderGrowthPercent);
+      setRevenueGrowth(revenueGrowthPercent);
+
+      // Format monthly chart data
+      const monthlyData = Object.entries(monthMap).map(([month, orders]) => ({
+        month,
+        orders,
+      }));
+      setMonthlyOrdersData(monthlyData);
+    } catch (error) {
+      console.error("Error loading dashboard:", error);
     }
-
-    // Isi data transaksi ke dalam map
-    response.data.data.forEach((trx) => {
-      const trxDate = new Date(trx.createdAt);
-      const label = trxDate.toLocaleString("id-ID", { month: "short", year: "numeric" });
-
-      if (monthMap[label] !== undefined) {
-        monthMap[label] += 1;
-      }
-    });
-
-    const formatted = Object.entries(monthMap).map(([month, orders]) => ({
-      month,
-      orders,
-    }));
-
-    setMonthlyOrdersData(formatted);
   };
-
 
   return (
     <AdminLayout>
@@ -109,17 +121,29 @@ const AdminDashboard = () => {
         />
         <p className="text-sm">Welcome to the admin dashboard.</p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-1 p-0 m-0 bg-white items-start">
-          <StatsCard title="Products" value={products.count} percent="+11.01%" isPositive />
-          <StatsCard title="Orders" value={totalOrders} percent="-9.05%" isPositive={false} />
-          Target Perbulan
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mt-4 items-start">
+          <StatsCard title="Products" value={products.count} percent="+0%" isPositive />
+          <StatsCard
+            title="Orders"
+            value={totalOrders}
+            percent={`${orderGrowth.toFixed(1)}%`}
+            isPositive={orderGrowth >= 0}
+          />
+          <StatsCard
+            title="Revenue"
+            value={`Rp ${totalRevenue.toLocaleString("id-ID")}`}
+            percent={`${revenueGrowth.toFixed(1)}%`}
+            isPositive={revenueGrowth >= 0}
+          />
 
           <div className="lg:col-span-2">
-            Chart Bulanan
+            <MonthlySalesChart data={monthlyOrdersData} />
           </div>
 
-          <div className="w-full">
-            Top produk
+          <MonthlyTarget totalRevenue={totalRevenue} target={monthlyTarget} />
+
+          <div className="lg:col-span-3">
+            <TopProductsTable data={transactions} />
           </div>
         </div>
       </div>

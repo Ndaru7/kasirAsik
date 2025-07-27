@@ -6,12 +6,12 @@ const TopProductsTable = ({ data }) => {
     if (!productMap[productName]) {
       productMap[productName] = 0;
     }
-    productMap[productName] += item.quantity;
+    productMap[productName] += item.qty;
   });
 
   const sortedProducts = Object.entries(productMap)
-    .map(([name, quantity]) => ({ name, quantity }))
-    .sort((a, b) => b.quantity - a.quantity)
+    .map(([name, qty]) => ({ name, qty }))
+    .sort((a, b) => b.qty - a.qty)
     .slice(0, 5); // Ambil top 5
 
   return (
@@ -21,14 +21,14 @@ const TopProductsTable = ({ data }) => {
         <thead>
           <tr className="text-left border-b">
             <th className="pb-1">Product</th>
-            <th className="pb-1 text-right">Quantity Sold</th>
+            <th className="pb-1 text-right">qty Sold</th>
           </tr>
         </thead>
         <tbody>
           {sortedProducts.map((item, index) => (
             <tr key={index} className="border-b last:border-none">
               <td className="py-1">{item.name}</td>
-              <td className="py-1 text-right">{item.quantity}</td>
+              <td className="py-1 text-right">{item.qty}</td>
             </tr>
           ))}
         </tbody>
