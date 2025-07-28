@@ -5,7 +5,6 @@ import CashierLayout from './layout/CashierLayout';
 import Cashier from './components/Cashier';
 import SplitText from '../admin/animation/SplitText';
 
-
 const CashierDashboard = () => {
     const { user, logout } = useAuth();
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -26,7 +25,7 @@ const CashierDashboard = () => {
                     <div class="w-full">
                         <h1 className="text-5xl font-bold mb-6">Kasir Kita</h1>
                         <SplitText
-                            text={`Welcome, ${user?.name}`}
+                            text={`Welcome, ${user?.username}`}
                             className="text-xl mb-10"
                             delay={100}
                             duration={0.6}

@@ -10,6 +10,8 @@ const ProductsList = () => {
   const [category, setCategory] = useState([])
   const [products, setProducts] = useState([])
 
+  // Token User
+  const token = localStorage.getItem('token');
   useEffect(() => {
     getCategory();
     getProducts();
@@ -25,21 +27,25 @@ const ProductsList = () => {
 
 
   const getCategory = async () => {
-    const response = await axios.get(myApi + '/category', {
-      withCredentials: true
+    const response = await axios.get(myApi + 'kasir/category/', {
+      headers: {
+        Authorization: `Token ${token}`
+      }
     })
     setCategory(response.data)
     console.log(response.data)
   }
   const getProducts = async () => {
-    const response = await axios.get(myApi + '/products', {
-      params:{
+    const response = await axios.get(myApi + 'kasir/products/', {
+      params: {
         limit: 50 //change if the product does not appear in the table, 50 > bigger means increasing output
       },
-      withCredentials: true
+      headers: {
+        Authorization: `Token ${token}`
+      }
     })
-    setProducts(response.data.data)
-    console.log(response.data.data)
+    setProducts(response.data.results)
+    console.log(response.data.results)
   }
   return (
     <CashierLayout>

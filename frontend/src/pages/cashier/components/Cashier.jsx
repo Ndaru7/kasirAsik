@@ -9,24 +9,25 @@ const Cashier = ({ isOpen, onClose }) => {
   const [showPayment, setShowPayment] = useState(false);
   const [paidAmount, setPaidAmount] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     getProducts();
   }, []);
 
   const getProducts = async () => {
-    const response = await axios.get(myApi + '/products', {
-      params:{
-        limit: 100 //change if the product does not appear in the table, 50 > bigger means increasing output
-      },
-      withCredentials: true,
+    const response = await axios.get(myApi + 'kasir/products/', {
+      params: { limit: 100 },
+      headers: { Authorization: `Token ${token}` }
     });
-    setProducts(response.data.data);
+    setProducts(response.data.results);
   };
 
   const filteredProducts = products
     .filter((product) =>
-      product.name.toLowerCase().includes(search.toLocaleLowerCase())
+      product.name.toLowerCase().includes(search.toLowerCase())
     )
     .slice(0, 100);
 
@@ -88,16 +89,39 @@ const Cashier = ({ isOpen, onClose }) => {
       setError('Nominal pembayaran kurang');
       return;
     }
-    try {
-      await axios.post(myApi + '/transactions', {
-        user_id: 1, // hardcoded untuk contoh
-        items: cart.map((item) => ({ product_id: item.id, quantity: item.qty })),
-        paid_amount: parseInt(paidAmount),
-      }, { withCredentials: true });
 
-      setTimeout(() => {
-        handleClose();
-      }, 1000);
+    try {
+      const transactionResponse = await axios.post(myApi + 'kasir/transaction/', {
+        items: cart.map((item) => ({
+          id_product: item.id,
+          qty: item.qty
+        }))
+      }, {
+        headers: { Authorization: `Token ${token}` }
+      });
+
+      const transaction = transactionResponse.data;
+
+      const paymentResponse = await axios.post(myApi + 'kasir/payment/', {
+        id_transaction: transaction.id,
+        amount: parseInt(paidAmount)
+      }, {
+        headers: { Authorization: `Token ${token}` }
+      });
+
+      const change = paymentResponse.data.change;
+
+      setSuccessMessage({
+        total: transaction.total,
+        amount: paidAmount,
+        change: change
+      });
+
+      // Reset cart, etc.
+      setCart([]);
+      setPaidAmount('');
+      setShowPayment(false);
+      setError('');
     } catch (err) {
       console.error(err);
       setError('Gagal melakukan transaksi');
@@ -228,6 +252,44 @@ const Cashier = ({ isOpen, onClose }) => {
               </div>
             </div>
           )}
+          {successMessage && (
+            <div className="p-4 mb-4 text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800" role="alert">
+              <div className="flex items-center">
+                <svg className="shrink-0 w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                </svg>
+                <h3 className="text-lg font-medium">Transaksi Berhasil</h3>
+              </div>
+              <div className="mt-2 mb-4 text-sm">
+                <p>Total: Rp {parseInt(successMessage.total).toLocaleString()}</p>
+                <p>Dibayar: Rp {parseInt(successMessage.amount).toLocaleString()}</p>
+                <p>Kembalian: Rp {parseInt(successMessage.change).toLocaleString()}</p>
+              </div>
+              <div className="flex">
+                <button
+                  type="button"
+                  className="text-white bg-green-800 hover:bg-green-900 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                  onClick={() => {
+                    setSuccessMessage(null);
+                    handleClose();
+                  }}
+                >
+                  <svg className="me-2 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
+                    <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+                  </svg>
+                  View more
+                </button>
+                <button
+                  type="button"
+                  className="text-green-800 bg-transparent border border-green-800 hover:bg-green-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:hover:bg-green-600 dark:border-green-600 dark:text-green-400 dark:hover:text-white dark:focus:ring-green-800"
+                  onClick={() => setSuccessMessage(null)}
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>

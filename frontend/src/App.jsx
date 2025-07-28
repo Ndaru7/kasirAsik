@@ -28,7 +28,7 @@ function App() {
   const CashierRoute = ({ children }) => {
     if (loading) return <div className="p-6">Loading...</div>;
     if (!user) return <Navigate to="/login" />;
-    if (user.role !== 'cashier') return <Navigate to="/login" />;
+    if (user.role !== 'kasir') return <Navigate to="/login" />;
     return children;
   };
 

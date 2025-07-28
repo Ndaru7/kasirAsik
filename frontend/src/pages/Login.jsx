@@ -29,7 +29,7 @@ const Login = () => {
       const role = res.data.user.role;
       if (role === 'admin') {
         navigate('/admin/dashboard');
-      } else if (role === 'cashier') {
+      } else if (role === 'kasir') {
         navigate('/cashier/dashboard');
       }
     } catch (err) {

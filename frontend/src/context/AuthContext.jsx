@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Token ${token}`,
         },
       });
-      setUser(res.data[0]); // karena response berupa array
+      setUser(res.data);
     } catch (err) {
       console.error('Gagal mengambil data user:', err);
       localStorage.removeItem('token');
