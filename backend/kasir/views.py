@@ -76,8 +76,12 @@ class AuthViewSet(viewsets.ViewSet):
                         status=status.HTTP_200_OK)
 
 # User Views
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
     permission_classes = [DjangoModelPermissions]
-    pagination_class = None
+
+    @action(detail=False, methods=["get"])
+    def me(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
