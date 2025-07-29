@@ -7,40 +7,74 @@ import { useNavigate } from 'react-router';
 const History = () => {
   const [transactions, setTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [limit] = useState(5);
 
-  const [sort, setSort] = useState('createdAt');
+  const [sort, setSort] = useState('date');
   const [order, setOrder] = useState('desc');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const token = localStorage.getItem('token');
 
   const navigate = useNavigate();
 
+  // Data hasil filter, sort, dan pagination
+  const [filteredData, setFilteredData] = useState([]);
+
   useEffect(() => {
     getTransactions();
-  }, [currentPage, sort, order, startDate, endDate]);
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [transactions, sort, order, startDate, endDate, currentPage]);
 
   const getTransactions = async () => {
     try {
-      const res = await axios.get(
-        `${myApi}/transactions-summary?page=${currentPage}&limit=${limit}&sort=${sort}&order=${order}&startDate=${startDate}&endDate=${endDate}`,
-        { withCredentials: true }
-      );
-      setTransactions(res.data.data);
-      setTotalPages(res.data.totalPages);
+      const res = await axios.get(`${myApi}kasir/transaction/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      setTransactions(res.data);
     } catch (err) {
       console.error(err);
     }
   };
 
+  const applyFilters = () => {
+    let data = [...transactions];
+
+    // Filter berdasarkan tanggal
+    if (startDate) {
+      data = data.filter((t) => new Date(t.date) >= new Date(startDate));
+    }
+    if (endDate) {
+      data = data.filter((t) => new Date(t.date) <= new Date(endDate));
+    }
+
+    // Sort
+    data.sort((a, b) => {
+      let valA = sort === 'date' ? new Date(a.date) : a.total;
+      let valB = sort === 'date' ? new Date(b.date) : b.total;
+      return order === 'asc' ? valA - valB : valB - valA;
+    });
+
+    setFilteredData(data);
+  };
+
   const handleReset = () => {
     setStartDate('');
     setEndDate('');
-    setSort('createdAt');
+    setSort('date');
     setOrder('desc');
     setCurrentPage(1);
   };
+
+  const totalPages = Math.ceil(filteredData.length / limit);
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * limit,
+    currentPage * limit
+  );
 
   return (
     <CashierLayout>
@@ -75,8 +109,8 @@ const History = () => {
             }}
             className="border border-black rounded px-2 py-1"
           >
-            <option value="createdAt">Date</option>
-            <option value="total_price">Total Price</option>
+            <option value="date">Date</option>
+            <option value="total">Total Price</option>
           </select>
           <select
             value={order}
@@ -111,26 +145,40 @@ const History = () => {
               </tr>
             </thead>
             <tbody>
-              {transactions.length === 0 ? (
+              {paginatedData.length === 0 ? (
                 <tr>
                   <td colSpan="5" className="text-center py-4 text-gray-500">
-                    No data found                  
-                    </td>
+                    No data found
+                  </td>
                 </tr>
               ) : (
-                transactions.map((item, idx) => (
-                  <tr key={item.id} className="text-black font-semibold">
-                    <td className="px-6 py-2">{(currentPage - 1) * limit + idx + 1}</td>
-                    <td className="px-6 py-2">
-                      {new Date(item.createdAt).toLocaleDateString('id-ID')}
-                    </td>
-                    <td className="px-6 py-2">{item.totalItems}</td>
-                    <td className="px-6 py-2">{item.total_price}</td>
-                    <td className="px-6 py-2 text-blue-300 hover:underline cursor-pointer">
-                      <button onClick={() => navigate(`/cashier/history-detail/${item.id}`)}>details</button>
-                    </td>
-                  </tr>
-                ))
+                paginatedData.map((item, idx) => {
+                  const totalItems = item.items.reduce(
+                    (acc, curr) => acc + curr.qty,
+                    0
+                  );
+                  return (
+                    <tr key={item.id} className="text-black font-semibold">
+                      <td className="px-6 py-2">
+                        {(currentPage - 1) * limit + idx + 1}
+                      </td>
+                      <td className="px-6 py-2">
+                        {new Date(item.date).toLocaleDateString('id-ID')}
+                      </td>
+                      <td className="px-6 py-2">{totalItems}</td>
+                      <td className="px-6 py-2">Rp. {item.total.toLocaleString('id-ID')}</td>
+                      <td className="px-6 py-2 text-blue-300 hover:underline cursor-pointer">
+                        <button
+                          onClick={() =>
+                            navigate(`/cashier/history-detail/${item.id}`)
+                          }
+                        >
+                          details
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
@@ -148,7 +196,9 @@ const History = () => {
               Page {currentPage} of {totalPages}
             </span>
             <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
               disabled={currentPage === totalPages}
               className="bg-black text-white px-4 py-2 rounded-full disabled:opacity-50"
             >

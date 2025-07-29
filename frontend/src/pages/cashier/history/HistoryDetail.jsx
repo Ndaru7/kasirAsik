@@ -7,7 +7,15 @@ import myApi from '../../api/Api';
 const HistoryDetail = () => {
   const { transaction_id } = useParams();
   const navigate = useNavigate();
-  const [details, setDetails] = useState([]);
+  const [transaction, setTransaction] = useState(null);
+  const token = localStorage.getItem('token');
+
+  const formatRupiah = (number) =>
+    new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(number);
 
   useEffect(() => {
     getTransactionDetails();
@@ -15,11 +23,12 @@ const HistoryDetail = () => {
 
   const getTransactionDetails = async () => {
     try {
-      const response = await axios.get(`${myApi}/transaction-details/${transaction_id}`, {
-        withCredentials: true
+      const response = await axios.get(`${myApi}kasir/transaction/${transaction_id}/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
       });
-      setDetails(response.data);
-      console.log(response.data)
+      setTransaction(response.data);
     } catch (err) {
       console.error('Gagal mengambil detail transaksi:', err);
     }
@@ -42,22 +51,28 @@ const HistoryDetail = () => {
               </tr>
             </thead>
             <tbody>
-              {details.length === 0 ? (
+              {!transaction ? (
                 <tr>
                   <td colSpan="5" className="text-center py-4 text-gray-500">
                     Tidak ada data ditemukan
                   </td>
                 </tr>
               ) : (
-                details.map((item, index) => (
-                  <tr key={index} className="text-black font-semibold">
-                    <td className="px-6 py-2">{index + 1}</td>
-                    <td className="px-6 py-2">{item.product?.name}</td>
-                    <td className="px-6 py-2">{item.quantity}</td>
-                    <td className="px-6 py-2">{item.price_each}</td>
-                    <td className="px-6 py-2">{item.subtotal}</td>
-                  </tr>
-                ))
+                transaction.items.map((item, index) => {
+                  const unitPrice = item.product?.price || 0;
+                  const qty = item.qty || 0;
+                  const subTotal = unitPrice * qty;
+
+                  return (
+                    <tr key={index} className="text-black font-semibold">
+                      <td className="px-6 py-2">{index + 1}</td>
+                      <td className="px-6 py-2">{item.product?.name}</td>
+                      <td className="px-6 py-2">{qty}</td>
+                      <td className="px-6 py-2">{formatRupiah(unitPrice)}</td>
+                      <td className="px-6 py-2">{formatRupiah(subTotal)}</td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
