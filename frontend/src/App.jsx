@@ -13,6 +13,8 @@ import ProductsList from './pages/cashier/products/ProductsList';
 import About from './pages/cashier/about/About';
 import HistoryDetail from './pages/cashier/history/HistoryDetail';
 import HistoryReport from './pages/admin/history transaction/HistoryReport';
+import LandingPage from './pages/LandingPage';
+import NotFound from './pages/NotFound';
 
 
 
@@ -35,6 +37,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route index path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
 
         {/* ROUTE ADMIN */}
@@ -137,7 +140,7 @@ function App() {
         />
 
         {/* Fallback */}
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
