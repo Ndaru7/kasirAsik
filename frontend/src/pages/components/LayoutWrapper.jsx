@@ -18,7 +18,7 @@ const LayoutWrapper = ({ children }) => {
       ? segments.map(formatSegment).join(' ')
       : 'Landing Page';
 
-    document.title = `${pageTitle} | TailAdmin`;
+    document.title = `${pageTitle} | KasirKita`;
   }, [location]);
 
   return children;
