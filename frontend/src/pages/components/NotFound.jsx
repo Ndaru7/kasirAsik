@@ -1,19 +1,21 @@
 import { useNavigate } from 'react-router';
+import FuzzyText from './FuzzyText';
 
-const NotFound = () => {
+const NotFound = ({ hoverIntensity, enableHover }) => {
   const navigate = useNavigate();
 
   return (
     <div className="flex flex-col min-h-screen justify-center items-center bg-gray-50 px-4 text-center relative">
       {/* Konten Tengah */}
       <div>
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-2">ERROR</h1>
 
-        <div className="text-6xl md:text-8xl font-bold text-blue-600 flex items-center justify-center gap-2">
-          <span>4</span>
-          <span className="text-[3rem] md:text-[5rem]">😞</span>
-          <span>4</span>
-        </div>
+        <FuzzyText
+          baseIntensity={0.2}
+          hoverIntensity={hoverIntensity}
+          enableHover={enableHover}
+        >
+          404
+        </FuzzyText>
 
         <p className="text-gray-600 mt-4 text-sm md:text-base">
           We can’t seem to find the page you are looking for!

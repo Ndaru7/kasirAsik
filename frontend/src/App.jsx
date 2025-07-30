@@ -14,9 +14,8 @@ import About from './pages/cashier/about/About';
 import HistoryDetail from './pages/cashier/history/HistoryDetail';
 import HistoryReport from './pages/admin/history transaction/HistoryReport';
 import LandingPage from './pages/LandingPage';
-import NotFound from './pages/NotFound';
-
-
+import NotFound from './pages/components/NotFound';
+import LayoutWrapper from './pages/components/LayoutWrapper';
 
 function App() {
   const { user, loading } = useAuth();
@@ -36,6 +35,7 @@ function App() {
 
   return (
     <Router>
+      <LayoutWrapper />
       <Routes>
         <Route index path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
