@@ -1,4 +1,5 @@
 .drf-env/
+.venv/
 core/__pycache__/
 *.sqlite3
 kasir/__pycache__/
