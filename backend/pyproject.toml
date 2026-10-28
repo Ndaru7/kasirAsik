@@ -7,6 +7,7 @@ dependencies = [
     "django-cors-headers>=4.9.0",
     "django-filter>=26.2",
     "djangorestframework>=3.18.3",
+    "drf-spectacular[sidecar]>=0.30.0",
     "pillow>=13.0.0",
     "tzdata>=2026.5",
 ]

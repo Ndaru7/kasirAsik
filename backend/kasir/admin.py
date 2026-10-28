@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from kasir.models import Product, Category, Transaction, Payment, User
+
+from kasir.models import Category, Payment, Product, Transaction, User
 
 
 class CustomUser(UserAdmin):

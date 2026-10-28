@@ -1,5 +1,7 @@
-from kasir.models import Product, Transaction
 from django_filters import rest_framework as filters
+
+from kasir.models import Product, Transaction
+
 
 class TransactionFilter(filters.FilterSet):
     date = filters.DateFilter(field_name="date", lookup_expr="date")

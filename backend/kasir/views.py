@@ -1,18 +1,21 @@
-from rest_framework import viewsets, status
-from rest_framework.permissions import DjangoModelPermissions
+from django.contrib.auth import authenticate
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
-from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django_filters.rest_framework import DjangoFilterBackend
-from django.contrib.auth import authenticate
-from django.contrib.auth import logout as logout_view
-from kasir.models import Product, Category, Transaction, Payment, User
-from kasir.serializers import (ProductSerializer,CategorySerializer,
-                          TransactionSerializer, PaymentSerializer,
-                          UserSerializer)
-from kasir.filters import TransactionFilter, ProductFilter
+from rest_framework.permissions import DjangoModelPermissions
+from rest_framework.response import Response
+
+from kasir.filters import ProductFilter, TransactionFilter
+from kasir.models import Category, Payment, Product, Transaction, User
+from kasir.serializers import (
+    CategorySerializer,
+    PaymentSerializer,
+    ProductSerializer,
+    TransactionSerializer,
+    UserSerializer,
+)
 
 
 # Product views
